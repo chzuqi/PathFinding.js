@@ -24,7 +24,7 @@ var Controller = StateMachine.create({
         },
         {
             name: 'finish',
-            from: 'searching',
+            from:[ 'searching','paused'],
             to:   'finished'
         },
         {
@@ -216,6 +216,11 @@ $.extend(Controller, {
             text: 'Clear Walls',
             enabled: true,
             callback: $.proxy(this.reset, this),
+        }, {
+            id: 4,
+            text: 'Step Search',
+            enabled: true,
+            callback: $.proxy(this.stepSearch, this),
         });
         // => [starting, draggingStart, draggingEnd, drawingStart, drawingEnd]
     },
@@ -272,6 +277,11 @@ $.extend(Controller, {
             text: 'Clear Path',
             enabled: true,
             callback: $.proxy(this.clear, this),
+        }, {
+            id: 4,
+            text: 'Step Search',
+            enabled: false,
+            callback: $.proxy(this.stepSearch, this),
         });
     },
     onmodified: function() {
@@ -336,6 +346,17 @@ $.extend(Controller, {
 
         this.operations = [];
     },
+    stepSearch: function(){
+        console.log(Controller.current);
+        if (!Controller.is('paused')) {
+            Controller.start();
+            Controller.pause();
+        }
+        else
+        {
+            Controller.step();
+        }
+    },
     bindEvents: function() {
         $('#draw_area').mousedown($.proxy(this.mousedown, this));
         $(window)
@@ -359,6 +380,7 @@ $.extend(Controller, {
         do {
             if (!operations.length) {
                 this.finish(); // transit to `finished` state
+                console.log("fin");
                 return;
             }
             op = operations.shift();
