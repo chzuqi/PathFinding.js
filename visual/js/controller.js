@@ -91,7 +91,7 @@ var Controller = StateMachine.create({
 });
 
 $.extend(Controller, {
-    gridSize: [64, 36], // number of nodes horizontally and vertically
+    gridSize: [12, 8], // number of nodes horizontally and vertically
     operationsPerSecond: 300,
 
     /**
@@ -380,7 +380,6 @@ $.extend(Controller, {
         do {
             if (!operations.length) {
                 this.finish(); // transit to `finished` state
-                console.log("fin");
                 return;
             }
             op = operations.shift();
@@ -502,6 +501,39 @@ $.extend(Controller, {
 
         this.setStartPos(centerX - 5, centerY);
         this.setEndPos(centerX + 5, centerY);
+
+        var walkabilityMatrix = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+            [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0,],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,],
+            [7, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 9,],
+        ];
+        for (var y = 0; y < walkabilityMatrix.length; y++)
+        {
+            for (var x = 0; x < walkabilityMatrix[y].length; x++)
+            {
+                if (walkabilityMatrix[y][x] == 1)
+                {
+                    this.setWalkableAt(x, y, false);
+                }
+                else if (walkabilityMatrix[y][x] == 0)
+                {
+                    this.setWalkableAt(x, y, true);
+                }
+                else if (walkabilityMatrix[y][x] == 7)
+                {
+                    this.setStartPos(x, y);
+                }
+                else if (walkabilityMatrix[y][x] == 9)
+                {
+                    this.setEndPos(x, y);
+                }
+            }
+        }
     },
     setStartPos: function(gridX, gridY) {
         this.startX = gridX;

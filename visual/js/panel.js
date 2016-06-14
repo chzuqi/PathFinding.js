@@ -84,6 +84,26 @@ var Panel = {
             }
             break;
 
+        case 'deepfirst_header':
+            allowDiagonal = typeof $('#deepfirst_section ' +
+                    '.allow_diagonal:checked').val() !== 'undefined';
+            biDirectional = typeof $('#deepfirst_section ' +
+                    '.bi-directional:checked').val() !== 'undefined';
+            dontCrossCorners = typeof $('#deepfirst_section ' +
+                    '.dont_cross_corners:checked').val() !=='undefined';
+            if (biDirectional) {
+                finder = new PF.DeepFirstFinder({
+                    allowDiagonal: allowDiagonal,
+                    dontCrossCorners: dontCrossCorners
+                });
+            } else {
+                finder = new PF.DeepFirstFinder({
+                    allowDiagonal: allowDiagonal,
+                    dontCrossCorners: dontCrossCorners
+                });
+            }
+            break;
+
         case 'bestfirst_header':
             allowDiagonal = typeof $('#bestfirst_section ' +
                                      '.allow_diagonal:checked').val() !== 'undefined';
