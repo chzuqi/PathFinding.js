@@ -66,7 +66,7 @@ DeepFirstFinder.prototype.findPath = function(startX, startY, endX, endY, grid) 
             if (neighbor.closed || neighbor.opened) {
                 continue;
             }
-            
+
             openList.unshift(neighbor);
             neighbor.opened = true;
             neighbor.parent = node;
